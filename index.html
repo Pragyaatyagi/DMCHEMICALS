@@ -2116,120 +2116,72 @@
                 <div
                     class="contact-form"
                 >
+<form id="enquiryForm">
 
+    <input
+        type="text"
+        name="name"
+        class="form-control"
+        placeholder="Your Name"
+        required
+    >
 
-                   <form
-    action="send-enquiry.php"
-    method="POST"
->
+    <input
+        type="email"
+        name="email"
+        class="form-control"
+        placeholder="Your Email"
+        required
+    >
 
-                        <input
+    <input
+        type="tel"
+        name="phone"
+        class="form-control"
+        placeholder="Phone Number"
+    >
 
-                            type="text"
+    <select
+        name="product"
+        class="form-control"
+    >
 
-                            name="Name"
+        <option value="">
+            Select Product
+        </option>
 
-                            class="form-control"
+        <option value="VC-76 - Finishing Chemical">
+            VC-76 - Finishing Chemical
+        </option>
 
-                            placeholder="Your Name"
+        <option value="ST-75 - Polishing Chemical">
+            ST-75 - Polishing Chemical
+        </option>
 
-                            required
+        <option value="DT-21 - Deburring Chemical">
+            DT-21 - Deburring Chemical
+        </option>
 
-                        >
+    </select>
 
+    <textarea
+        name="message"
+        class="form-control"
+        rows="5"
+        placeholder="Tell us about your requirement"
+        required
+    ></textarea>
 
-                        <input
+    <button
+        type="submit"
+        class="product-btn border-0"
+    >
+        SEND ENQUIRY
+    </button>
 
-                            type="email"
+</form>
 
-                            name="Email"
-
-                            class="form-control"
-
-                            placeholder="Your Email"
-
-                            required
-
-                        >
-
-
-                        <input
-
-                            type="tel"
-
-                            name="Phone"
-
-                            class="form-control"
-
-                            placeholder="Phone Number"
-
-                        >
-
-
-                        <select
-
-                            name="Product"
-
-                            class="form-control"
-
-                        >
-
-                            <option>
-
-                                Select Product
-
-                            </option>
-
-
-                            <option>
-
-                                VC-76 - Finishing Chemical
-
-                            </option>
-
-
-                            <option>
-
-                                ST-75 - Polishing Chemical
-
-                            </option>
-
-
-                            <option>
-
-                                DT-21 - Deburring Chemical
-
-                            </option>
-
-                        </select>
-
-
-                        <textarea
-
-                            name="Message"
-
-                            class="form-control"
-
-                            rows="5"
-
-                            placeholder="Tell us about your requirement"
-
-                        ></textarea>
-
-
-                        <button
-
-                            type="submit"
-
-                            class="product-btn border-0"
-
-                        >
-
-                            SEND ENQUIRY
-
-                        </button>
-
-                    </form>
+<p id="formStatus"></p>
 
                 </div>
 
@@ -2446,7 +2398,89 @@
 
 ></script>
 
+<script>
 
+    const enquiryForm =
+        document.getElementById("enquiryForm");
+
+    const formStatus =
+        document.getElementById("formStatus");
+
+
+    enquiryForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            // Stop the page from refreshing
+            event.preventDefault();
+
+
+            // Show sending message
+            formStatus.innerText =
+                "Sending enquiry...";
+
+
+            // Collect form data
+            const formData =
+                new FormData(enquiryForm);
+
+
+            // Convert form data to normal JavaScript object
+            const data =
+                Object.fromEntries(formData);
+
+
+            try {
+
+                // Send data to Vercel backend
+                const response =
+                    await fetch(
+                        "/api/send-enquiry",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(data)
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (result.success) {
+
+                    formStatus.innerText =
+                        "Your enquiry has been sent successfully!";
+
+                    enquiryForm.reset();
+
+                } else {
+
+                    formStatus.innerText =
+                        "Something went wrong. Please try again.";
+
+                }
+
+
+            } catch (error) {
+
+                formStatus.innerText =
+                    "Unable to send enquiry. Please try again.";
+
+            }
+
+        }
+
+    );
+
+</script>
 </body>
 
 </html>
