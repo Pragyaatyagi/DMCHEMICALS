@@ -1,0 +1,9 @@
+# Local environment variables - never commit this
+.env.local
+.env
+
+# Node modules
+node_modules/
+
+.vercel
+.env*

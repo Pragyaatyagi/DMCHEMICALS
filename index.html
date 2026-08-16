@@ -2141,28 +2141,27 @@
         placeholder="Phone Number"
     >
 
-    <select
-        name="product"
-        class="form-control"
-    >
-
-        <option value="">
-            Select Product
-        </option>
-
-        <option value="VC-76 - Finishing Chemical">
-            VC-76 - Finishing Chemical
-        </option>
-
-        <option value="ST-75 - Polishing Chemical">
-            ST-75 - Polishing Chemical
-        </option>
-
-        <option value="DT-21 - Deburring Chemical">
-            DT-21 - Deburring Chemical
-        </option>
-
-    </select>
+    <div class="mb-3 px-1">
+        <label class="form-label d-block mb-2 text-muted" style="font-size: 14px; font-weight: 600;">Select Product(s):</label>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" name="product" value="VC-76 - Finishing Chemical" id="prod_vc76">
+            <label class="form-check-label" for="prod_vc76" style="font-size: 14px; color: #142d4c; font-weight: 500;">
+                VC-76 - Finishing Chemical
+            </label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" name="product" value="ST-75 - Polishing Chemical" id="prod_st75">
+            <label class="form-check-label" for="prod_st75" style="font-size: 14px; color: #142d4c; font-weight: 500;">
+                ST-75 - Polishing Chemical
+            </label>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="product" value="DT-21 - Deburring Chemical" id="prod_dt21">
+            <label class="form-check-label" for="prod_dt21" style="font-size: 14px; color: #142d4c; font-weight: 500;">
+                DT-21 - Deburring Chemical
+            </label>
+        </div>
+    </div>
 
     <textarea
         name="message"
@@ -2428,6 +2427,11 @@
             // Convert form data to normal JavaScript object
             const data =
                 Object.fromEntries(formData);
+
+            // Extract all selected products from checkboxes
+            const checkedBoxes = Array.from(enquiryForm.querySelectorAll('input[name="product"]:checked'));
+            const selectedProducts = checkedBoxes.map(cb => cb.value);
+            data.product = selectedProducts.join(", ");
 
 
             try {
