@@ -2116,122 +2116,71 @@
                 <div
                     class="contact-form"
                 >
+<form id="enquiryForm">
 
+    <input
+        type="text"
+        name="name"
+        class="form-control"
+        placeholder="Your Name"
+        required
+    >
 
-                    <form
-                        action="mailto:dmchemicals77@gmail.com"
-                        method="post"
-                        enctype="text/plain"
-                    >
+    <input
+        type="email"
+        name="email"
+        class="form-control"
+        placeholder="Your Email"
+        required
+    >
 
+    <input
+        type="tel"
+        name="phone"
+        class="form-control"
+        placeholder="Phone Number"
+    >
 
-                        <input
+    <div class="mb-3 px-1">
+        <label class="form-label d-block mb-2 text-muted" style="font-size: 14px; font-weight: 600;">Select Product(s):</label>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" name="product" value="VC-76 - Finishing Chemical" id="prod_vc76">
+            <label class="form-check-label" for="prod_vc76" style="font-size: 14px; color: #142d4c; font-weight: 500;">
+                VC-76 - Finishing Chemical
+            </label>
+        </div>
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" name="product" value="ST-75 - Polishing Chemical" id="prod_st75">
+            <label class="form-check-label" for="prod_st75" style="font-size: 14px; color: #142d4c; font-weight: 500;">
+                ST-75 - Polishing Chemical
+            </label>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="product" value="DT-21 - Deburring Chemical" id="prod_dt21">
+            <label class="form-check-label" for="prod_dt21" style="font-size: 14px; color: #142d4c; font-weight: 500;">
+                DT-21 - Deburring Chemical
+            </label>
+        </div>
+    </div>
 
-                            type="text"
+    <textarea
+        name="message"
+        class="form-control"
+        rows="5"
+        placeholder="Tell us about your requirement"
+        required
+    ></textarea>
 
-                            name="Name"
+    <button
+        type="submit"
+        class="product-btn border-0"
+    >
+        SEND ENQUIRY
+    </button>
 
-                            class="form-control"
+</form>
 
-                            placeholder="Your Name"
-
-                            required
-
-                        >
-
-
-                        <input
-
-                            type="email"
-
-                            name="Email"
-
-                            class="form-control"
-
-                            placeholder="Your Email"
-
-                            required
-
-                        >
-
-
-                        <input
-
-                            type="tel"
-
-                            name="Phone"
-
-                            class="form-control"
-
-                            placeholder="Phone Number"
-
-                        >
-
-
-                        <select
-
-                            name="Product"
-
-                            class="form-control"
-
-                        >
-
-                            <option>
-
-                                Select Product
-
-                            </option>
-
-
-                            <option>
-
-                                VC-76 - Finishing Chemical
-
-                            </option>
-
-
-                            <option>
-
-                                ST-75 - Polishing Chemical
-
-                            </option>
-
-
-                            <option>
-
-                                DT-21 - Deburring Chemical
-
-                            </option>
-
-                        </select>
-
-
-                        <textarea
-
-                            name="Message"
-
-                            class="form-control"
-
-                            rows="5"
-
-                            placeholder="Tell us about your requirement"
-
-                        ></textarea>
-
-
-                        <button
-
-                            type="submit"
-
-                            class="product-btn border-0"
-
-                        >
-
-                            SEND ENQUIRY
-
-                        </button>
-
-                    </form>
+<p id="formStatus"></p>
 
                 </div>
 
@@ -2448,7 +2397,94 @@
 
 ></script>
 
+<script>
 
+    const enquiryForm =
+        document.getElementById("enquiryForm");
+
+    const formStatus =
+        document.getElementById("formStatus");
+
+
+    enquiryForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            // Stop the page from refreshing
+            event.preventDefault();
+
+
+            // Show sending message
+            formStatus.innerText =
+                "Sending enquiry...";
+
+
+            // Collect form data
+            const formData =
+                new FormData(enquiryForm);
+
+
+            // Convert form data to normal JavaScript object
+            const data =
+                Object.fromEntries(formData);
+
+            // Extract all selected products from checkboxes
+            const checkedBoxes = Array.from(enquiryForm.querySelectorAll('input[name="product"]:checked'));
+            const selectedProducts = checkedBoxes.map(cb => cb.value);
+            data.product = selectedProducts.join(", ");
+
+
+            try {
+
+                // Send data to Vercel backend
+                const response =
+                    await fetch(
+                        "/api/send-enquiry",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(data)
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (result.success) {
+
+                    formStatus.innerText =
+                        "Your enquiry has been sent successfully!";
+
+                    enquiryForm.reset();
+
+                } else {
+
+                    formStatus.innerText =
+                        "Something went wrong. Please try again.";
+
+                }
+
+
+            } catch (error) {
+
+                formStatus.innerText =
+                    "Unable to send enquiry. Please try again.";
+
+            }
+
+        }
+
+    );
+
+</script>
 </body>
 
 </html>
