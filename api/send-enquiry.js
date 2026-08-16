@@ -56,8 +56,7 @@ module.exports = async function handler(req, res) {
 
         await transporter.sendMail({
             from: `"DM Chemicals Website" <${process.env.GMAIL_USER}>`,
-            to: "vikrant2003aug06@gmail.com",
-            // to: "dmchemicals77@gmail.com",
+          to: "dmchemicals77@gmail.com",
             subject: `New Enquiry from ${name} - DM Chemicals Website`,
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
